@@ -1,0 +1,117 @@
+/*_______________________________________________________________________________________________
+ * /// FADES ////////////////////////////////////////////////////////////////////////////////////
+ * 
+ */
+
+/*
+ * Fades the element it applies to.
+ * Default to fade in. Reverse to fade out.
+ */
+@-webkit-keyframes fade{ 
+	0%{opacity: 0.0;}
+	100%{opacity: 1.0;}
+}
+
+/*
+ * Fade in while sliding down in position
+ */
+@-webkit-keyframes cloud-slide-down{}
+
+/*
+ * Fade in while sliding up in position
+ */
+@-webkit-keyframes cloud-slide-up{}
+
+
+/*_______________________________________________________________________________________________
+ * /// ROTATES //////////////////////////////////////////////////////////////////////////////////
+ * 
+ */
+
+/*
+ * Rotates the element it applies to by 90deg.
+ */
+@-webkit-keyframes rotate-CW-90{
+	0%{}
+	100%{-webkit-transform: rotate(90deg)}
+}
+
+/*
+ * Rotates the element it applies to by 180deg.
+ */
+@-webkit-keyframes rotate-CW-180{
+	0%{}
+	100%{-webkit-transform: rotate(180deg)}
+}
+
+/*
+ * Rotates the element it applies to by 270deg.
+ */
+@-webkit-keyframes rotate-CW-270{
+	0%{}
+	100%{-webkit-transform: rotate(270deg)}
+}
+
+/*
+ * Rotates the element it applies to by 360deg.
+ */
+@-webkit-keyframes rotate-CW-360{
+	0%{}
+	100%{-webkit-transform: rotate(360deg)}
+}
+
+/*_______________________________________________________________________________________________
+ * /// FLIPS ////////////////////////////////////////////////////////////////////////////////////
+ * 
+ */
+
+/*
+ * Flips an element along a vertical axis forward (top goes to bottom) to reveal its back-face. 
+ */
+@-webkit-keyframes flip-vertical-front-face{
+	0%{				
+		-webkit-transform-style: preserve-3d;
+		-webkit-backface-visibility: hidden;		
+		-webkit-transform: rotateY(0deg);	
+	}
+	100%{		
+		-webkit-transform-style: preserve-3d;
+		-webkit-backface-visibility: hidden;		
+		-webkit-transform: rotateY(-180deg);		
+	}
+}
+
+/*
+ * Flips an element along a vertical axis forward (top goes to bottom) to reveal its back-face. 
+ */
+@-webkit-keyframes flip-vertical-back-face{
+	0%{
+		-webkit-transform-style: preserve-3d;
+		-webkit-backface-visibility: hidden;				
+		-webkit-transform: rotateY(-180deg);		
+	}
+	100%{			
+		-webkit-transform-style: preserve-3d;
+		-webkit-backface-visibility: hidden;				
+		-webkit-transform: rotateY(0deg);
+}
+
+/*
+ * Brings an element to the fron of the stack
+ */
+@-webkit-keyframes send-to-front{
+	0%{}
+	100%{z-index: 1000}
+}
+/*
+ * Sends an element to the bottom of the stack
+ */
+@-webkit-keyframes send-to-back{
+	0%{}
+	100%{z-index: 1}
+}
+
+
+
+
+
