@@ -108,19 +108,154 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 /*
-* ANIMATION CLASS
+ * CLASS AnimationTimeline
+ */
+
+/* Constructor */
+function AnimationTimeline(options) {
+	this.fps = 30;
+	this.animations = [];
+	this.delay = 0;
+	this.loop = false;
+	//this.snapToFrames = true;
+
+	this.tracks = [];
+
+	/*
+	 * Scan Animations to check if some of them apply to the same Element.
+	 * If so the Animations are grouped.
+	 * Then Timeline Tracks are created (with one or more Animation)
+	 */
+	var tempAnimations = this.animations;
+	while(tempAnimations.length > 0) {
+
+		var trackAnimations = [tempAnimations.splice(0, 1)];
+
+		for(var i = 0; i < tempAnimations.length; i++) {
+			if(trackAnimations[0].element === tempAnimations[i].element) {
+				trackAnimations.push(tempAnimations.splice(i--, 1));
+			}
+		}
+
+		this.tracks.push(new AnimationTrack(trackAnimations));
+	}
+}
+
+AnimationTimeline.prototype.play = function() {
+};
+AnimationTimeline.prototype.stop = function() {
+};
+//Timeline.prototype.pause = function(){};
+//Track.prototype.resume = function(){};
+//Track.prototype.rewind = function(){};
+//Track.prototype.goto = function(){};
+
+/*
+ * CLASS AnimationTrack
+ * 
+ * A track is a series of Animations that apply to one DOM element
+ */
+function AnimationTrack(animations) {// Animations need to be on the same DOM element
+	var a = (animations.length) ? animations : [animations];
+
+	/*
+	 * Reprocess Animations to group them.
+	 * If 2 or more animations are overlapping, then they need
+	 * to be passed together as CSS rules.
+	 *
+	 * The process will also re-write the cssRule properties of these Animation.
+	 */
+
+};
+
+AnimationTrack.prototype.play = function() {
+};
+AnimationTrack.prototype.stop = function() {
+};
+//Track.prototype.pause = function(){};
+//Track.prototype.resume = function(){};
+//Track.prototype.rewind = function(){};
+//Track.prototype.goto = function(){};
+
+
+
+
+/*
+* CLASS Animation
 */
 
 /* Constructor */
 function Animation(options) {
-	this.animatedElement = options.animatedElement || null;
-	this.keyframesName = options.keyframesName || null;
-	this.startAt = options.startAt || 0;
-	this.endAt = options.endAt || 0;
-	this.count = options.count || 1;
-	this.fillMode = options.fillMode || 'both';
-	this.direction = options.direction || 'normal';
+	var T = this;
+	T.element = options.element || '';
+	T.name = options.name || '';	
+	T.duration = options.duration || '500ms';
+	T.delay = options.delay || '0s';
+	T.count = options.count || 1;
+	T.fillMode = options.fillMode || 'both';
+	T.direction = options.direction || 'normal';
+	T.timingFunction = options.timingFunction || 'linear';
+	T.animationPlayState = options.animationPlayState || 'paused';
+	
+	T.vendorPrefixes = ['webkit', 'moz', 'o', 'ms'];
+	T.cssRules = []
+		.concat(T.appendVendorPrefixes({'key': 'animation-name','value': T.name}))
+		.concat(T.appendVendorPrefixes({'key': 'animation-duration','value': T.duration}))
+		.concat(T.appendVendorPrefixes({'key': 'animation-delay','value': T.delay}))
+		.concat(T.appendVendorPrefixes({'key': 'animation-count','value': T.count}))
+		.concat(T.appendVendorPrefixes({'key': 'animation-fill-mode','value': T.fillMode}))
+		.concat(T.appendVendorPrefixes({'key': 'animation-direction','value': T.direction}))
+		.concat(T.appendVendorPrefixes({'key': 'animation-timing-function','value': T.timingFunction}))
+		.concat(T.appendVendorPrefixes({'key': 'animation-play-state','value': T.animationPlayState}));
+		
+	$(T.element).bind('webkitAnimationEnd mozAnimationEnd animationEnd', function(){
+		T.stop();
+		console.log(T.element);
+	});	
+	
 };
+
+/* Control methods */
+Animation.prototype.play = function() {
+	
+	for(var rule in this.cssRules){
+		$(this.element).css(this.cssRules[rule].key, this.cssRules[rule].value);
+	}	
+	this.resume();
+	//console.log(this);	
+};
+Animation.prototype.stop = function() {
+		
+	for(var rule in this.cssRules){
+		//this.cssRules[rule].key.indexOf('animation-name') != -1 ? $(this.element).css(this.cssRules[rule].key, 'none'):null;
+		if(this.cssRules[rule].key.indexOf('animation-name') != -1){
+			$(this.element).css(this.cssRules[rule].key, 'none');
+		} 		
+	}
+	//console.log(this);
+};
+Animation.prototype.pause = function(){
+	var cssRules = this.appendVendorPrefixes({'key': 'animation-play-state','value': 'paused'});
+	for(var rule in cssRules){
+		$(this.element).css(cssRules[rule].key, cssRules[rule].value);
+	}
+};
+Animation.prototype.resume = function(){
+	var cssRules = this.appendVendorPrefixes({'key': 'animation-play-state','value': 'running'});
+	for(var rule in cssRules){
+		$(this.element).css(cssRules[rule].key, cssRules[rule].value);
+	}
+};
+Animation.prototype.rewind = function(){
+	this.stop();
+	
+};
+//Animation.prototype.goto = function(){};
+
+/* Chaining methods */
+//Animation.prototype.onStart = function() {};
+//Animation.prototype.onKeyframe = function() {};
+//Animation.prototype.onEnd = function() {};
 
 /* Setters & getters */
 Animation.prototype.setAnimatedElement = function(newElement) {
@@ -165,160 +300,13 @@ Animation.prototype.setDirection = function(newDirection) {
 Animation.prototype.getFillMode = function() {
 	return this.direction;
 };
-/* Control methods */
-Animation.prototype.start = function() {
-	return this;
-};
-/* Chaining methods */
-Animation.prototype.onStart = function(callback) {
-	callback();
-	return this;
-};
-Animation.prototype.onKeyframe = function(callback) {
-	callback();
-	return this;
-};
-Animation.prototype.onEnd = function(callback) {
-	callback();
-	return this;
-};
 
 
-/*
- * TRACK CLASS
- * 
- * A track is a series of Animations that apply to one DOM element
- */
-function Track(animations) {// Animations need to be on the same DOM element
-	var a = (animations.length) ? animations : [animations];
 
-	/*
-	 * Reprocess Animations to group them.
-	 * If 2 or more animations are overlapping, then they need
-	 * to be passed together as CSS rules.
-	 *
-	 * The process will also re-write the cssRule properties of these Animation.
-	 */
-
-};
-
-Track.prototype.play = function() {
-};
-Track.prototype.stop = function() {
-};
-//Track.prototype.pause = function(){};
-//Track.prototype.resume = function(){};
-//Track.prototype.rewind = function(){};
-//Track.prototype.goto = function(){};
-
-/*
- * TIMELINE CLASS
- */
-
-/* Constructor */
-function Timeline(options) {
-	this.fps = 30;
-	this.animations = [];
-	this.delay = 0;
-	this.loop = false;
-	//this.snapToFrames = true;
-
-	this.tracks = [];
-
-	/*
-	 * Scan Animations to check if some of them apply to the same Element.
-	 * If so the Animations are grouped.
-	 * Then Timeline Tracks are created (with one or more Animation)
-	 */
-	var tempAnimations = this.animations;
-	while(tempAnimations.length > 0) {
-
-		var trackAnimations = [tempAnimations.splice(0, 1)];
-
-		for(var i = 0; i < tempAnimations.length; i++) {
-			if(trackAnimations[0].element === tempAnimations[i].element) {
-				trackAnimations.push(tempAnimations.splice(i--, 1));
-			}
-		}
-
-		this.tracks.push(new Track(trackAnimations));
-	}
+/* CSS related methods */
+Animation.prototype.appendVendorPrefixes = function(cssRule){
+	var cssRules = [cssRule];
+	for(var i=0; i<this.vendorPrefixes.length; i++) cssRules.push({'key': '-' + this.vendorPrefixes[i] + '-' + cssRules[0].key, 'value': cssRules[0].value});
+	return cssRules;
 }
 
-Timeline.prototype.play = function() {
-};
-Timeline.prototype.stop = function() {
-};
-//Timeline.prototype.pause = function(){};
-//Track.prototype.resume = function(){};
-//Track.prototype.rewind = function(){};
-//Track.prototype.goto = function(){};
-
-/*
- * Animation Class jQuery wrapper
- */
-
-;(function($) {
-	$.fn.extend({
-		animation : function(options) {
-			this.defaultOptions = {
-			};
-
-			var settings = $.extend({}, this.defaultOptions, options);
-
-			return this.each(function() {
-
-				var $this = $(this);
-
-			});
-		}
-	});
-})(jQuery);
-
-/*
- * Timeline jQuery wrapper
- */
-
-;(function($) {
-
-	$.fn.extend({
-
-		animationTimeline : function(options) {
-
-			this.defaultOptions = {
-				fps : 30,
-				animations : [],
-				delay : 0,
-				snapToFrames : true,
-				loop : false
-			};
-
-			var settings = $.extend({}, this.defaultOptions, options);
-
-			return this.each(function() {
-
-				var $this = $(this);
-
-				setTimeout(function() {//Set the initial delay if any
-
-					for(var i = 0; i < settings.animations.length; i++) {	// Iterate through animations
-
-						// Scan all animations to check if some apply to the same object in parallel
-
-					}
-
-				}, settings.delay);
-			});
-			function millisecondsToFrames(ms) {// Convert milliseconds to a # of frames according to the FPS defined
-
-				return Math.floor(ms * settings.fps / 1000);
-			};
-
-			function framesToMilliseconds(fms) {// Convert a # of frames to milliseconds according to the FPS defined
-
-				return Math.floor(fms / settings.fps * 1000);
-			};
-
-		}
-	});
-})(jQuery);

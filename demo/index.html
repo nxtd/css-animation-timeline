@@ -8,7 +8,7 @@
 
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title></title>
+  <title>Javascript Animation Timeline Framework Demo</title>
   <meta name="description" content="">
 
   <meta name="viewport" content="width=device-width">
@@ -16,16 +16,76 @@
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
 
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations-catalog.css">
 
   <script src="js/libs/modernizr-2.5.0.min.js"></script>
 </head>
 <body>
   <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
   <header>
-
+	<h1>Javascript Animation Timeline Framework Demo</h1>
   </header>
   <div role="main">
-
+	<section id="animation-demo">
+		<header>
+			<h2>Animation Demo</h2>
+		</header>
+		<div>
+			<form>
+				<fieldset class="animation-name">
+					<label>Name</label>
+					<select></select>
+				</fieldset>
+				<fieldset class="animation-duration">
+					<label>Duration</label>
+					<input type="number" value="1500" step="500"/>
+				</fieldset>
+				<fieldset class="animation-delay">
+					<label>Delay</label>
+					<input type="number" value="0" step="500" />
+				</fieldset>
+				<fieldset class="animation-count">
+					<label>Count</label>
+					<input type="number" value="1"/>
+				</fieldset>
+				<fieldset class="animation-direction">
+					<label>Direction</label>
+					<select>
+						<option>normal</option>
+						<option>alternate</option>
+					</select>
+				</fieldset>
+				<fieldset class="animation-fill-mode">
+					<label>Fill Mode</label>
+					<select>
+						<option>both</option>
+						<option>forwards</option>
+						<option>backwards</option>
+						<option>none</option>
+					</select>
+				</fieldset>
+				<fieldset class="animation-timing-function">
+					<label>Timing Function</label>
+					<select>
+						<option>linear</option>
+						<option>ease-in</option>
+						<option>ease-out</option>
+						<option>ease-in-out</option>
+					</select>
+				</fieldset>
+				
+				<a class="play-animation" href="javascript:;">Play</a>
+				<a class="stop-animation" href="javascript:;">Stop</a>
+				<a class="pause-animation" href="javascript:;">pasue</a>	
+				<a class="resume-animation" href="javascript:;">Resume</a>		
+			</form>
+			<div class="playground">
+				<div class="toy" style='width: 300px; height: 100px; margin-top: 50px; background: cyan'>
+					I am your toy
+				</div>
+			</div>
+		</div>
+	</section>
   </div>
   <footer>
 
@@ -38,6 +98,7 @@
 
   <script src="js/plugins.js"></script>
   <script src="js/script.js"></script>
+  <script src="../animation-framework.js"></script>
 
   <script>
     var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
