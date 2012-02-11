@@ -4,6 +4,7 @@ $(document).ready(function(){
 	if(cssKeyframesRules!=null){
 		for(var rule in cssKeyframesRules){		
 			$('#animation-demo .animation-name select').append($('<option>'+ cssKeyframesRules[rule].name +'</option>'));
+			$('#multiple-animations-demo .animation-name select').append($('<option>'+ cssKeyframesRules[rule].name +'</option>'));			
 		}
 	}
 	else{
@@ -16,23 +17,27 @@ $(document).ready(function(){
 		if(!toy1){
 			toy1 = new Animation({
 				element: $('#animation-demo .toy')[0],
-				name: $('#animation-demo form .animation-name select').val(),
-				duration: $('#animation-demo form .animation-duration input').val() + 'ms',
-				delay: $('#animation-demo form .animation-delay input').val(),
-				count: $('#animation-demo form .animation-count input').val(),
-				direction: $('#animation-demo form .animation-direction select').val(),
-				fillMode: $('#animation-demo form .animation-fill-mode select').val(),
-				timingFunction: $('#animation-demo form .animation-timing-function select').val()
+				animations:[
+					{
+						name: $('#animation-demo form .animation-name select').val(),
+						duration: $('#animation-demo form .animation-duration input').val() + 'ms',
+						delay: $('#animation-demo form .animation-delay input').val(),
+						count: $('#animation-demo form .animation-count input').val(),
+						direction: $('#animation-demo form .animation-direction select').val(),
+						fillMode: $('#animation-demo form .animation-fill-mode select').val(),
+						timingFunction: $('#animation-demo form .animation-timing-function select').val()
+					}
+				]				
 			});
 		}
 		else{
-			toy1.setName($('#animation-demo form .animation-name select').val());
-			toy1.setDuration($('#animation-demo form .animation-duration input').val() + 'ms');	
-			toy1.setDelay($('#animation-demo form .animation-delay input').val());
-			toy1.setCount($('#animation-demo form .animation-count input').val()); 
-			toy1.setFillMode($('#animation-demo form .animation-fill-mode select').val());
-			toy1.setDirection($('#animation-demo form .animation-direction select').val());
-			toy1.setTimingFunction($('#animation-demo form .animation-timing-function select').val());
+			toy1.setName(0, $('#animation-demo form .animation-name select').val());
+			toy1.setDuration(0, $('#animation-demo form .animation-duration input').val() + 'ms');	
+			toy1.setDelay(0, $('#animation-demo form .animation-delay input').val());
+			toy1.setCount(0, $('#animation-demo form .animation-count input').val()); 
+			toy1.setFillMode(0, $('#animation-demo form .animation-fill-mode select').val());
+			toy1.setDirection(0, $('#animation-demo form .animation-direction select').val());
+			toy1.setTimingFunction(0, $('#animation-demo form .animation-timing-function select').val());
 		}
 		
 		toy1.play();
@@ -46,6 +51,64 @@ $(document).ready(function(){
 	});
 	$('#animation-demo form .resume-animation').click(function(){
 		toy1.resume();
+	});
+	
+	
+	// MULTIPLE ANIMATIONS
+	var toy2 = null;
+	$('#multiple-animations-demo .play-animation').click(function(){
+		if(!toy2){
+			toy2 = new Animation({
+				element: $('#multiple-animations-demo .toy')[0],
+				animations:[
+					{
+						name: $('#multiple-animations-demo .animation-1 .animation-name select').val(),
+						duration: $('#multiple-animations-demo .animation-1 .animation-duration input').val() + 'ms',
+						delay: $('#multiple-animations-demo .animation-1 .animation-delay input').val(),
+						count: $('#multiple-animations-demo .animation-1 .animation-count input').val(),
+						direction: $('#multiple-animations-demo .animation-1 .animation-direction select').val(),
+						fillMode: $('#multiple-animations-demo .animation-1 .animation-fill-mode select').val(),
+						timingFunction: $('#multiple-animations-demo .animation-1 .animation-timing-function select').val()
+					},
+					{
+						name: $('#multiple-animations-demo .animation-2 .animation-name select').val(),
+						duration: $('#multiple-animations-demo .animation-2 .animation-duration input').val() + 'ms',
+						delay: $('#multiple-animations-demo .animation-2 .animation-delay input').val(),
+						count: $('#multiple-animations-demo .animation-2 .animation-count input').val(),
+						direction: $('#multiple-animations-demo .animation-2 .animation-direction select').val(),
+						fillMode: $('#multiple-animations-demo .animation-2 .animation-fill-mode select').val(),
+						timingFunction: $('#multiple-animations-demo .animation-2 .animation-timing-function select').val()
+					}
+				]				
+			});
+		}
+		else{
+			toy2.setName(0, $('#multiple-animations-demo .animation-1 .animation-name select').val());
+			toy2.setDuration(0, $('#multiple-animations-demo .animation-1 .animation-duration input').val() + 'ms');	
+			toy2.setDelay(0, $('#multiple-animations-demo .animation-1 .animation-delay input').val());
+			toy2.setCount(0, $('#multiple-animations-demo .animation-1 .animation-count input').val()); 
+			toy2.setFillMode(0, $('#multiple-animations-demo .animation-1 .animation-fill-mode select').val());
+			toy2.setDirection(0, $('#multiple-animations-demo .animation-1 .animation-direction select').val());
+			toy2.setTimingFunction(0, $('#multiple-animations-demo .animation-1 .animation-timing-function select').val());
+			toy2.setName(1, $('#multiple-animations-demo .animation-2 .animation-name select').val());
+			toy2.setDuration(1, $('#multiple-animations-demo .animation-2 .animation-duration input').val() + 'ms');	
+			toy2.setDelay(1, $('#multiple-animations-demo .animation-2 .animation-delay input').val());
+			toy2.setCount(1, $('#multiple-animations-demo .animation-2 .animation-count input').val()); 
+			toy2.setFillMode(1, $('#multiple-animations-demo .animation-2 .animation-fill-mode select').val());
+			toy2.setDirection(1, $('#multiple-animations-demo .animation-2 .animation-direction select').val());
+			toy2.setTimingFunction(1, $('#multiple-animations-demo .animation-2 .animation-timing-function select').val());
+		}
+		
+		toy2.play();
+	});
+	$('#multiple-animations-demo .stop-animation').click(function(){
+		toy2.stop();
+	});
+	$('#multiple-animations-demo .pause-animation').click(function(){
+		toy2.pause();
+	});
+	$('#multiple-animations-demo .resume-animation').click(function(){
+		toy2.resume();
 	});
 });
 
