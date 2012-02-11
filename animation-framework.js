@@ -236,7 +236,7 @@ Animation.prototype.getName = function() {
 	return this.name;
 };
 Animation.prototype.setDuration = function(newDuration) {
-	if(!(newDuration.match(/^[0-9]+[0-9]ms$|^[0-9]+[0-9]s$|^\[1-9]ms$|^\[1-9]s$/) ? 
+	if(!(newDuration.match(/^[0-9]{2,}ms$|^[0-9]{2,}s$|^\[1-9]ms$|^\[1-9]s$/) ? 
 		this.duration = newDuration : 
 		newDuration.match(/^[0-9]+[0-9]$|^\[1-9]$/) ? 
 			this.duration = newDuration + 'ms' : 
