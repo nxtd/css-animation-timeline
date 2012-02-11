@@ -249,9 +249,9 @@ Animation.prototype.getDuration = function() {
 	return this.duration;
 };
 Animation.prototype.setDelay = function(newDelay) {
-	this.delay = newDelay.match(/^[0-9]+[0-9]ms$|^[0-9]+[0-9]s$|^\[1-9]ms$|^\[1-9]s$/) ? 
+	this.delay = newDelay.match(/^[0-9]{2,}ms$|^[0-9]{2,}s$|^\[1-9]ms$|^\[1-9]s$/) ? 
 		newDelay : 
-		newDelay.match(/^[0-9]+[0-9]$|^\[1-9]$/) ? 
+		newDelay.match(/^[0-9]{2,}$|^\[1-9]$/) ? 
 			newDelay + 'ms' : 
 			'';
 	this.status = this.NEEDS_CSS_REFRESH;
@@ -260,7 +260,7 @@ Animation.prototype.getDelay = function() {
 	return this.delay;
 };
 Animation.prototype.setCount = function(newCount) {
-	this.count = newCount.match(/^[0-9]+[0-9]$|^[2-9]$|^\s*infinite\s*$/) ? newCount : '';
+	this.count = newCount.match(/^[0-9]{2,}$|^[2-9]$|^\s*infinite\s*$/) ? newCount : '';
 	this.status = this.NEEDS_CSS_REFRESH; 
 };
 Animation.prototype.getCount = function() {
