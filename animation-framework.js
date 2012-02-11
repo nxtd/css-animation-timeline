@@ -220,13 +220,6 @@ Animation.prototype.resume = function(){
 	}
 };
 
-//Animation.prototype.goto = function(){};
-
-/* Chaining methods */
-//Animation.prototype.onStart = function() {};
-//Animation.prototype.onKeyframe = function() {};
-//Animation.prototype.onEnd = function() {};
-
 /* Setters & getters */
 Animation.prototype.setElement = function(newElement) {
 	if(!(this.element = newElement)) throw(new Error('Animation: an element is required'));
