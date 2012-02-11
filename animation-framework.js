@@ -151,41 +151,12 @@ AnimationTimeline.prototype.stop = function() {
 //Track.prototype.goto = function(){};
 
 /*
- * CLASS AnimationTrack
- * 
- * A track is a series of Animations that apply to one DOM element
- */
-function AnimationTrack(animations) {// Animations need to be on the same DOM element
-	var a = (animations.length) ? animations : [animations];
-
-	/*
-	 * Reprocess Animations to group them.
-	 * If 2 or more animations are overlapping, then they need
-	 * to be passed together as CSS rules.
-	 *
-	 * The process will also re-write the cssRule properties of these Animation.
-	 */
-
-};
-
-AnimationTrack.prototype.play = function() {
-};
-AnimationTrack.prototype.stop = function() {
-};
-//Track.prototype.pause = function(){};
-//Track.prototype.resume = function(){};
-//Track.prototype.rewind = function(){};
-//Track.prototype.goto = function(){};
-
-
-
-
-/*
 * CLASS Animation
 */
 
 /* Constructor */
 function Animation(options) {
+	this.status = this.NEEDS_CSS_REFRESH;
 	
 	this.setElement(options.element);
 	this.setName(options.name);	
@@ -198,20 +169,29 @@ function Animation(options) {
 	
 	this.vendorPrefixes = ['webkit', 'moz', 'o', 'ms'];
 	
-	// The order of the rules is IMPORTANT
-	this.cssRules = this.appendVendorPrefixes({
-			'key': 'animation',
-			'value': [this.name, this.duration, this.delay, this.count, this.fillMode, this.direction, this.timingFunction].join(' ') 
-	});		
-		
+	this.refreshCssRules();	
 	
 	var _this = this;	
 	$(this.element).bind('webkitAnimationEnd mozAnimationEnd animationEnd', function(){});	
 	
 };
 
+/* CONSTANTS */
+Animation.prototype.READY = 'ready';
+Animation.prototype.NEEDS_CSS_REFRESH = 'needs css refresh';
+
+
 /* Control methods */
 Animation.prototype.play = function() {
+	
+	while(this.status != this.READY){
+		switch(this.status){
+			case this.NEEDS_CSS_REFRESH:{
+				this.refreshCssRules();
+				break;
+			}
+		}
+	}
 	
 	for(var rule in this.cssRules){
 		console.log(this.cssRules[rule].value)
@@ -249,13 +229,15 @@ Animation.prototype.resume = function(){
 
 /* Setters & getters */
 Animation.prototype.setElement = function(newElement) {
-	if(!(this.element = newElement)) throw(new Error('Animation: an element is required'));	
+	if(!(this.element = newElement)) throw(new Error('Animation: an element is required'));
+	this.status = this.NEEDS_CSS_REFRESH;
 };
 Animation.prototype.getElement = function() {
 	return this.element;
 };
 Animation.prototype.setName = function(newName) {
-	if(!(this.name = newName)) throw(new Error('Animation: an animation name is required'));	
+	if(!(this.name = newName)) throw(new Error('Animation: an animation name is required'));
+	this.status = this.NEEDS_CSS_REFRESH;	
 };
 Animation.prototype.getName = function() {
 	return this.name;
@@ -268,6 +250,7 @@ Animation.prototype.setDuration = function(newDuration) {
 			false
 		)
 	) throw new Error('Animation: an animation duration is required');
+	this.status = this.NEEDS_CSS_REFRESH;
 };
 Animation.prototype.getDuration = function() {
 	return this.duration;
@@ -278,30 +261,35 @@ Animation.prototype.setDelay = function(newDelay) {
 		newDelay.match(/^[0-9]+[0-9]$|^\[1-9]$/) ? 
 			newDelay + 'ms' : 
 			'';
+	this.status = this.NEEDS_CSS_REFRESH;
 };
 Animation.prototype.getDelay = function() {
 	return this.delay;
 };
 Animation.prototype.setCount = function(newCount) {
-	this.count = newCount.match(/^[0-9]+[0-9]$|^[2-9]$|^\s*infinite\s*$/) ? newCount : ''; 
+	this.count = newCount.match(/^[0-9]+[0-9]$|^[2-9]$|^\s*infinite\s*$/) ? newCount : '';
+	this.status = this.NEEDS_CSS_REFRESH; 
 };
 Animation.prototype.getCount = function() {
 	return this.count;
 };
 Animation.prototype.setFillMode = function(newFillMode) {
 	this.fillMode = newFillMode.match(/^\s*both\s*$|^\s*forwards\s*$|^\s*backwards\s*$/) ? newFillMode : '';
+	this.status = this.NEEDS_CSS_REFRESH;
 };
 Animation.prototype.getFillMode = function() {
 	return this.fillMode;
 };
 Animation.prototype.setDirection = function(newDirection) {
 	this.direction = newDirection.match(/^\s*alternate\s*$/) ? newDirection : '';
+	this.status = this.NEEDS_CSS_REFRESH;
 };
 Animation.prototype.getFillMode = function() {
 	return this.direction;
 };
 Animation.prototype.setTimingFunction = function(newTimingFunction) {
 	this.timingFunction = newTimingFunction.match(/^\s*ease\-in\s*$|^\s*ease\-out\s*$|^\s*ease\-in\-out\s*$/) ? newTimingFunction : 'linear';
+	this.status = this.NEEDS_CSS_REFRESH;
 };
 Animation.prototype.getTimingFunction = function() {
 	return this.timingFunction;
@@ -310,6 +298,14 @@ Animation.prototype.getTimingFunction = function() {
 
 
 /* CSS related methods */
+Animation.prototype.refreshCssRules = function(){
+	// The order of the rules is IMPORTANT
+	this.cssRules = this.appendVendorPrefixes({
+			'key': 'animation',
+			'value': [this.name, this.duration, this.delay, this.count, this.fillMode, this.direction, this.timingFunction].join(' ') 
+	});	
+	this.status = this.READY;
+}
 Animation.prototype.appendVendorPrefixes = function(cssRule){
 	var cssRules = [cssRule];
 	for(var i=0; i<this.vendorPrefixes.length; i++) cssRules.push({'key': '-' + this.vendorPrefixes[i] + '-' + cssRules[0].key, 'value': cssRules[0].value});

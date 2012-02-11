@@ -13,7 +13,7 @@ $(document).ready(function(){
 	var toy1 = null;
 	$('#animation-demo form .play-animation').click(function(){		
 		
-		//if(!toy1){
+		if(!toy1){
 			toy1 = new Animation({
 				element: $('#animation-demo .toy')[0],
 				name: $('#animation-demo form .animation-name select').val(),
@@ -24,7 +24,16 @@ $(document).ready(function(){
 				fillMode: $('#animation-demo form .animation-fill-mode select').val(),
 				timingFunction: $('#animation-demo form .animation-timing-function select').val()
 			});
-		//}
+		}
+		else{
+			toy1.setName($('#animation-demo form .animation-name select').val());
+			toy1.setDuration($('#animation-demo form .animation-duration input').val() + 'ms');	
+			toy1.setDelay($('#animation-demo form .animation-delay input').val());
+			toy1.setCount($('#animation-demo form .animation-count input').val()); 
+			toy1.setFillMode($('#animation-demo form .animation-fill-mode select').val());
+			toy1.setDirection($('#animation-demo form .animation-direction select').val());
+			toy1.setTimingFunction($('#animation-demo form .animation-timing-function select').val());
+		}
 		
 		toy1.play();
 		
