@@ -186,31 +186,33 @@ AnimationTrack.prototype.stop = function() {
 
 /* Constructor */
 function Animation(options) {
-	var T = this;
-	T.element = options.element || '';
-	T.name = options.name || '';	
-	T.duration = options.duration || '500ms';
-	T.delay = options.delay || '0s';
-	T.count = options.count || 1;
-	T.fillMode = options.fillMode || 'both';
-	T.direction = options.direction || 'normal';
-	T.timingFunction = options.timingFunction || 'linear';
-	T.animationPlayState = options.animationPlayState || 'paused';
-	
-	T.vendorPrefixes = ['webkit', 'moz', 'o', 'ms'];
-	T.cssRules = []
-		.concat(T.appendVendorPrefixes({'key': 'animation-name','value': T.name}))
-		.concat(T.appendVendorPrefixes({'key': 'animation-duration','value': T.duration}))
-		.concat(T.appendVendorPrefixes({'key': 'animation-delay','value': T.delay}))
-		.concat(T.appendVendorPrefixes({'key': 'animation-count','value': T.count}))
-		.concat(T.appendVendorPrefixes({'key': 'animation-fill-mode','value': T.fillMode}))
-		.concat(T.appendVendorPrefixes({'key': 'animation-direction','value': T.direction}))
-		.concat(T.appendVendorPrefixes({'key': 'animation-timing-function','value': T.timingFunction}))
-		.concat(T.appendVendorPrefixes({'key': 'animation-play-state','value': T.animationPlayState}));
 		
-	$(T.element).bind('webkitAnimationEnd mozAnimationEnd animationEnd', function(){
-		T.stop();
-		console.log(T.element);
+	this.element = options.element || '';
+	this.name = options.name || '';	
+	this.duration = options.duration || '500ms';
+	this.delay = options.delay || '';
+	this.count = options.count || '';
+	this.fillMode = options.fillMode || 'both';
+	this.direction = options.direction || '';
+	this.timingFunction = options.timingFunction || 'linear';
+	//this.animationPlayState = options.animationPlayState || '';
+	
+	this.vendorPrefixes = ['webkit', 'moz', 'o', 'ms'];
+	
+	// The order of the rules is IMPORTANT
+	this.cssRules = this.appendVendorPrefixes({'key': 'animation-name','value': this.name}))				
+		.concat(this.appendVendorPrefixes({'key': 'animation-duration','value': this.duration}))
+		.concat(this.appendVendorPrefixes({'key': 'animation-delay','value': this.delay}))
+		.concat(this.appendVendorPrefixes({'key': 'animation-count','value': this.count}))
+		.concat(this.appendVendorPrefixes({'key': 'animation-timing-function','value': this.timingFunction}))
+		.concat(this.appendVendorPrefixes({'key': 'animation-fill-mode','value': this.fillMode}))
+		.concat(this.appendVendorPrefixes({'key': 'animation-direction','value': this.direction}));		
+		//.concat(this.appendVendorPrefixes({'key': 'animation-play-state','value': this.animationPlayState}));
+	
+	var _this = this;	
+	$(this.element).bind('webkitAnimationEnd mozAnimationEnd animationEnd', function(){
+		_this.stop();
+		console.log(_this.element);
 	});	
 	
 };
@@ -218,38 +220,50 @@ function Animation(options) {
 /* Control methods */
 Animation.prototype.play = function() {
 	
+	var prop = '';
 	for(var rule in this.cssRules){
-		$(this.element).css(this.cssRules[rule].key, this.cssRules[rule].value);
-	}	
-	this.resume();
-	//console.log(this);	
-};
-Animation.prototype.stop = function() {
+		//$(this.element).css(this.cssRules[rule].key, this.cssRules[rule].value);
+		if(rule%5==0) prop += ' ' + this.cssRules[rule].value;
 		
+	}	
+	console.log(prop)
+	$(this.element).css('-webkit-animation', prop);
+	this.resume();
+};
+
+Animation.prototype.stop = function() {
+			$(this.element).css('-webkit-animation', '');
 	for(var rule in this.cssRules){
-		//this.cssRules[rule].key.indexOf('animation-name') != -1 ? $(this.element).css(this.cssRules[rule].key, 'none'):null;
+		/*this.cssRules[rule].key.indexOf('animation-name') != -1 ? $(this.element).css(this.cssRules[rule].key, 'none'):null;
+		this.cssRules[rule].key.indexOf('animation-duration') != -1 ? $(this.element).css(this.cssRules[rule].key, ''):null;
+		this.cssRules[rule].key.indexOf('animation-delay') != -1 ? $(this.element).css(this.cssRules[rule].key, ''):null;
+		this.cssRules[rule].key.indexOf('animation-fill-mode') != -1 ? $(this.element).css(this.cssRules[rule].key, 'none'):null;
+		this.cssRules[rule].key.indexOf('animation-direction') != -1 ? $(this.element).css(this.cssRules[rule].key, ''):null;
+		this.cssRules[rule].key.indexOf('animation-timing-function') != -1 ? $(this.element).css(this.cssRules[rule].key, 'none'):null;
+		
 		if(this.cssRules[rule].key.indexOf('animation-name') != -1){
 			$(this.element).css(this.cssRules[rule].key, 'none');
-		} 		
-	}
-	//console.log(this);
+			$(this.element).css(this.cssRules[rule].key, '');
+		}*/				
+	}	
+	/*var clone = this.element.cloneNode(true);
+	this.element.parentNode.replaceChild(clone, this.element);*/	
 };
+
 Animation.prototype.pause = function(){
 	var cssRules = this.appendVendorPrefixes({'key': 'animation-play-state','value': 'paused'});
 	for(var rule in cssRules){
 		$(this.element).css(cssRules[rule].key, cssRules[rule].value);
 	}
 };
+
 Animation.prototype.resume = function(){
 	var cssRules = this.appendVendorPrefixes({'key': 'animation-play-state','value': 'running'});
 	for(var rule in cssRules){
 		$(this.element).css(cssRules[rule].key, cssRules[rule].value);
 	}
 };
-Animation.prototype.rewind = function(){
-	this.stop();
-	
-};
+
 //Animation.prototype.goto = function(){};
 
 /* Chaining methods */

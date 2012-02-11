@@ -1,9 +1,13 @@
 $(document).ready(function(){
 	
 	var cssKeyframesRules = getCssKeyframesRules();
-	
-	for(var rule in cssKeyframesRules){		
-		$('#animation-demo .animation-name select').append($('<option>'+ cssKeyframesRules[rule].name +'</option>'));
+	if(cssKeyframesRules!=null){
+		for(var rule in cssKeyframesRules){		
+			$('#animation-demo .animation-name select').append($('<option>'+ cssKeyframesRules[rule].name +'</option>'));
+		}
+	}
+	else{
+		$('#animation-demo .animation-name select').append($('<option>rotate-CW-360</option>'));
 	}
 	
 	var toy1 = null;
@@ -39,24 +43,24 @@ $(document).ready(function(){
 function getCssKeyframesRules(){
 	
 	var ss = document.styleSheets;
+	var kfrs = [];
 	for (var i = ss.length - 1; i >= 0; i--) {
 		try {
 			var s = ss[i],
 				rs = s.cssRules ? s.cssRules : 
 					 s.rules ? s.rules : 
 					 [];
-			var kfrs = [];
 			
 			for (var j = rs.length - 1; j >= 0; j--) {
 				if (rs[j].type === window.CSSRule.WEBKIT_KEYFRAMES_RULE || rs[j].type === window.CSSRule.MOZ_KEYFRAMES_RULE){
 					kfrs.push(rs[j]);
 				}
-			}
-			return kfrs;
+			}			
 		}
-		catch(e) { /* Trying to interrogate a stylesheet from another domain will throw a security error */ }
+		catch(e) { /* Trying to interrogate a stylesheet from another domain will throw a security error */ }		
 	}
-	return null;
+	if(kfrs.length > 0) return kfrs;
+	else return null;
 }
 
 function findCssKeyframesRules(a){
