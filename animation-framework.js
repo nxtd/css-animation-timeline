@@ -186,68 +186,44 @@ AnimationTrack.prototype.stop = function() {
 
 /* Constructor */
 function Animation(options) {
-		
-	this.element = options.element || '';
-	this.name = options.name || '';	
-	this.duration = options.duration || '500ms';
-	this.delay = options.delay || '';
-	this.count = options.count || '';
-	this.fillMode = options.fillMode || 'both';
-	this.direction = options.direction || '';
-	this.timingFunction = options.timingFunction || 'linear';
-	//this.animationPlayState = options.animationPlayState || '';
+	
+	this.setElement(options.element);
+	this.setName(options.name);	
+	this.setDuration(options.duration);	
+	this.setDelay(options.delay);
+	this.setCount(options.count); 
+	this.setFillMode(options.fillMode);
+	this.setDirection(options.direction);
+	this.setTimingFunction(options.timingFunction);
 	
 	this.vendorPrefixes = ['webkit', 'moz', 'o', 'ms'];
 	
 	// The order of the rules is IMPORTANT
-	this.cssRules = this.appendVendorPrefixes({'key': 'animation-name','value': this.name}))				
-		.concat(this.appendVendorPrefixes({'key': 'animation-duration','value': this.duration}))
-		.concat(this.appendVendorPrefixes({'key': 'animation-delay','value': this.delay}))
-		.concat(this.appendVendorPrefixes({'key': 'animation-count','value': this.count}))
-		.concat(this.appendVendorPrefixes({'key': 'animation-timing-function','value': this.timingFunction}))
-		.concat(this.appendVendorPrefixes({'key': 'animation-fill-mode','value': this.fillMode}))
-		.concat(this.appendVendorPrefixes({'key': 'animation-direction','value': this.direction}));		
-		//.concat(this.appendVendorPrefixes({'key': 'animation-play-state','value': this.animationPlayState}));
+	this.cssRules = this.appendVendorPrefixes({
+			'key': 'animation',
+			'value': [this.name, this.duration, this.delay, this.count, this.fillMode, this.direction, this.timingFunction].join(' ') 
+	});		
+		
 	
 	var _this = this;	
-	$(this.element).bind('webkitAnimationEnd mozAnimationEnd animationEnd', function(){
-		_this.stop();
-		console.log(_this.element);
-	});	
+	$(this.element).bind('webkitAnimationEnd mozAnimationEnd animationEnd', function(){});	
 	
 };
 
 /* Control methods */
 Animation.prototype.play = function() {
 	
-	var prop = '';
 	for(var rule in this.cssRules){
-		//$(this.element).css(this.cssRules[rule].key, this.cssRules[rule].value);
-		if(rule%5==0) prop += ' ' + this.cssRules[rule].value;
-		
-	}	
-	console.log(prop)
-	$(this.element).css('-webkit-animation', prop);
-	this.resume();
+		console.log(this.cssRules[rule].value)
+		$(this.element).css(this.cssRules[rule].key, this.cssRules[rule].value);
+	}
+	this.resume();	
 };
 
-Animation.prototype.stop = function() {
-			$(this.element).css('-webkit-animation', '');
+Animation.prototype.stop = function() {			
 	for(var rule in this.cssRules){
-		/*this.cssRules[rule].key.indexOf('animation-name') != -1 ? $(this.element).css(this.cssRules[rule].key, 'none'):null;
-		this.cssRules[rule].key.indexOf('animation-duration') != -1 ? $(this.element).css(this.cssRules[rule].key, ''):null;
-		this.cssRules[rule].key.indexOf('animation-delay') != -1 ? $(this.element).css(this.cssRules[rule].key, ''):null;
-		this.cssRules[rule].key.indexOf('animation-fill-mode') != -1 ? $(this.element).css(this.cssRules[rule].key, 'none'):null;
-		this.cssRules[rule].key.indexOf('animation-direction') != -1 ? $(this.element).css(this.cssRules[rule].key, ''):null;
-		this.cssRules[rule].key.indexOf('animation-timing-function') != -1 ? $(this.element).css(this.cssRules[rule].key, 'none'):null;
-		
-		if(this.cssRules[rule].key.indexOf('animation-name') != -1){
-			$(this.element).css(this.cssRules[rule].key, 'none');
-			$(this.element).css(this.cssRules[rule].key, '');
-		}*/				
+		$(this.element).css(this.cssRules[rule].key, '');			
 	}	
-	/*var clone = this.element.cloneNode(true);
-	this.element.parentNode.replaceChild(clone, this.element);*/	
 };
 
 Animation.prototype.pause = function(){
@@ -272,47 +248,63 @@ Animation.prototype.resume = function(){
 //Animation.prototype.onEnd = function() {};
 
 /* Setters & getters */
-Animation.prototype.setAnimatedElement = function(newElement) {
-	this.element = newElement;
+Animation.prototype.setElement = function(newElement) {
+	if(!(this.element = newElement)) throw(new Error('Animation: an element is required'));	
 };
-Animation.prototype.getAnimatedElement = function() {
+Animation.prototype.getElement = function() {
 	return this.element;
 };
-Animation.prototype.setKeyframesName = function(newKeyframesName) {
-	this.keyframesName = newKeyframesName;
+Animation.prototype.setName = function(newName) {
+	if(!(this.name = newName)) throw(new Error('Animation: an animation name is required'));	
 };
-Animation.prototype.getKeyframesName = function() {
-	return this.keyframesName;
+Animation.prototype.getName = function() {
+	return this.name;
 };
-Animation.prototype.setStartAt = function(newTime) {
-	this.startAt = newTime;
+Animation.prototype.setDuration = function(newDuration) {
+	if(!(newDuration.match(/^[0-9]+[0-9]ms$|^[0-9]+[0-9]s$|^\[1-9]ms$|^\[1-9]s$/) ? 
+		this.duration = newDuration : 
+		newDuration.match(/^[0-9]+[0-9]$|^\[1-9]$/) ? 
+			this.duration = newDuration + 'ms' : 
+			false
+		)
+	) throw new Error('Animation: an animation duration is required');
 };
-Animation.prototype.getStartAt = function() {
-	return this.startAt;
+Animation.prototype.getDuration = function() {
+	return this.duration;
 };
-Animation.prototype.setEndAt = function(newTime) {
-	this.endAt = newTime;
+Animation.prototype.setDelay = function(newDelay) {
+	this.delay = newDelay.match(/^[0-9]+[0-9]ms$|^[0-9]+[0-9]s$|^\[1-9]ms$|^\[1-9]s$/) ? 
+		newDelay : 
+		newDelay.match(/^[0-9]+[0-9]$|^\[1-9]$/) ? 
+			newDelay + 'ms' : 
+			'';
 };
-Animation.prototype.getEndAt = function() {
-	return this.endAt;
+Animation.prototype.getDelay = function() {
+	return this.delay;
 };
 Animation.prototype.setCount = function(newCount) {
-	this.count = newCount;
+	this.count = newCount.match(/^[0-9]+[0-9]$|^[2-9]$|^\s*infinite\s*$/) ? newCount : ''; 
 };
 Animation.prototype.getCount = function() {
 	return this.count;
 };
 Animation.prototype.setFillMode = function(newFillMode) {
-	this.fillMode = newFillMode;
+	this.fillMode = newFillMode.match(/^\s*both\s*$|^\s*forwards\s*$|^\s*backwards\s*$/) ? newFillMode : '';
 };
 Animation.prototype.getFillMode = function() {
 	return this.fillMode;
 };
 Animation.prototype.setDirection = function(newDirection) {
-	this.direction = newDirection;
+	this.direction = newDirection.match(/^\s*alternate\s*$/) ? newDirection : '';
 };
 Animation.prototype.getFillMode = function() {
 	return this.direction;
+};
+Animation.prototype.setTimingFunction = function(newTimingFunction) {
+	this.timingFunction = newTimingFunction.match(/^\s*ease\-in\s*$|^\s*ease\-out\s*$|^\s*ease\-in\-out\s*$/) ? newTimingFunction : 'linear';
+};
+Animation.prototype.getTimingFunction = function() {
+	return this.timingFunction;
 };
 
 

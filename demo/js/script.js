@@ -13,20 +13,21 @@ $(document).ready(function(){
 	var toy1 = null;
 	$('#animation-demo form .play-animation').click(function(){		
 		
-		toy1 = new Animation({
-			element: $('#animation-demo .toy')[0],
-			name: $('#animation-demo form .animation-name select').val(),
-			duration: $('#animation-demo form .animation-duration input').val() + 'ms',
-			delay: $('#animation-demo form .animation-delay input').val() + 'ms',
-			count: $('#animation-demo form .animation-count input').val(),
-			direction: $('#animation-demo form .animation-direction select').val(),
-			fillMode: $('#animation-demo form .animation-fill-mode select').val(),
-			timingFunction: $('#animation-demo form .animation-timing-function select').val()
-		});
+		//if(!toy1){
+			toy1 = new Animation({
+				element: $('#animation-demo .toy')[0],
+				name: $('#animation-demo form .animation-name select').val(),
+				duration: $('#animation-demo form .animation-duration input').val() + 'ms',
+				delay: $('#animation-demo form .animation-delay input').val(),
+				count: $('#animation-demo form .animation-count input').val(),
+				direction: $('#animation-demo form .animation-direction select').val(),
+				fillMode: $('#animation-demo form .animation-fill-mode select').val(),
+				timingFunction: $('#animation-demo form .animation-timing-function select').val()
+			});
+		//}
 		
 		toy1.play();
 		
-		return false;
 	});
 	$('#animation-demo form .stop-animation').click(function(){
 		toy1.stop();
