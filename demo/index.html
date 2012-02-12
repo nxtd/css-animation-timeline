@@ -19,6 +19,28 @@
   <link rel="stylesheet" href="css/animations-catalog.css">
 
   <script src="js/libs/modernizr-2.5.0.min.js"></script>
+  
+  <style>
+  	body{
+  		font-size: 0.9em;
+  		font-family: 'Verdana','Star Avenue','SF Port McKenzie';
+  	}
+  	h1, h2, h3{
+  		font-family: 'SansBlack';
+  		font-weight: bold;
+  		padding: 0 0 10px 0;
+  		margin: 0;
+  	}
+  	h1{
+  		font-size: 5em;
+  		line-height: 1em;
+  		padding: 10px 10px 30px 10px;
+  		color: #777;
+  		text-shadow: 0 1px rgba(255,255,255, 0.3), 0 -1px 1px rgba(0,0,0,0.7);
+  		background: #777;
+  	}
+  	section{width: 33%; float: left; padding: 10px; box-sizing: border-box}
+  </style>
 </head>
 <body>
   <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
@@ -188,6 +210,162 @@
 			<div class="playground">
 				<div class="toy" style='width: 300px; height: 100px; margin-top: 50px; background: cyan'>
 					I am your toy
+				</div>
+			</div>
+		</div>
+	</section>
+	<section id="animation-timeline-demo">
+		<header>
+			<h2>Animation Timeline Demo</h2>
+		</header>
+		<div>
+			<form>
+				<div class="animation-1">
+					<h3>Animation 1</h3>
+					<fieldset class="animation-name">
+						<label>Name</label>
+						<select></select>
+					</fieldset>
+					<fieldset class="animation-duration">
+						<label>Duration</label>
+						<input type="number" step="500"/>
+					</fieldset>
+					<fieldset class="animation-delay">
+						<label>Delay</label>
+						<input type="number" value="0" step="500" />
+					</fieldset>
+					<fieldset class="animation-count">
+						<label>Count</label>
+						<input type="number" value="1"/>
+					</fieldset>
+					<fieldset class="animation-direction">
+						<label>Direction</label>
+						<select>
+							<option>normal</option>
+							<option>alternate</option>
+						</select>
+					</fieldset>
+					<fieldset class="animation-fill-mode">
+						<label>Fill Mode</label>
+						<select>
+							<option>both</option>
+							<option>forwards</option>
+							<option>backwards</option>
+							<option>none</option>
+						</select>
+					</fieldset>
+					<fieldset class="animation-timing-function">
+						<label>Timing Function</label>
+						<select>
+							<option>linear</option>
+							<option>ease-in</option>
+							<option>ease-out</option>
+							<option>ease-in-out</option>
+						</select>
+					</fieldset>
+				</div>	
+				<div class="animation-2">
+					<h3>Animation 2</h3>
+					<fieldset class="animation-name">
+						<label>Name</label>
+						<select></select>
+					</fieldset>
+					<fieldset class="animation-duration">
+						<label>Duration</label>
+						<input type="number" step="500"/>
+					</fieldset>
+					<fieldset class="animation-delay">
+						<label>Delay</label>
+						<input type="number" value="0" step="500" />
+					</fieldset>
+					<fieldset class="animation-count">
+						<label>Count</label>
+						<input type="number" value="1"/>
+					</fieldset>
+					<fieldset class="animation-direction">
+						<label>Direction</label>
+						<select>
+							<option>normal</option>
+							<option>alternate</option>
+						</select>
+					</fieldset>
+					<fieldset class="animation-fill-mode">
+						<label>Fill Mode</label>
+						<select>
+							<option>both</option>
+							<option>forwards</option>
+							<option>backwards</option>
+							<option>none</option>
+						</select>
+					</fieldset>
+					<fieldset class="animation-timing-function">
+						<label>Timing Function</label>
+						<select>
+							<option>linear</option>
+							<option>ease-in</option>
+							<option>ease-out</option>
+							<option>ease-in-out</option>
+						</select>
+					</fieldset>										
+				</div>	
+				<div class="animation-3">
+					<h3>Animation 3</h3>
+					<fieldset class="animation-name">
+						<label>Name</label>
+						<select></select>
+					</fieldset>
+					<fieldset class="animation-duration">
+						<label>Duration</label>
+						<input type="number" step="500"/>
+					</fieldset>
+					<fieldset class="animation-delay">
+						<label>Delay</label>
+						<input type="number" value="0" step="500" />
+					</fieldset>
+					<fieldset class="animation-count">
+						<label>Count</label>
+						<input type="number" value="1"/>
+					</fieldset>
+					<fieldset class="animation-direction">
+						<label>Direction</label>
+						<select>
+							<option>normal</option>
+							<option>alternate</option>
+						</select>
+					</fieldset>
+					<fieldset class="animation-fill-mode">
+						<label>Fill Mode</label>
+						<select>
+							<option>both</option>
+							<option>forwards</option>
+							<option>backwards</option>
+							<option>none</option>
+						</select>
+					</fieldset>
+					<fieldset class="animation-timing-function">
+						<label>Timing Function</label>
+						<select>
+							<option>linear</option>
+							<option>ease-in</option>
+							<option>ease-out</option>
+							<option>ease-in-out</option>
+						</select>
+					</fieldset>										
+				</div>			
+				<a class="play-animation" href="javascript:;">Play</a>
+				<a class="stop-animation" href="javascript:;">Stop</a>
+				<a class="pause-animation" href="javascript:;">Pause</a>	
+				<a class="resume-animation" href="javascript:;">Resume</a>	
+			</form>
+			<div class="playground">
+				<div class="toy" style='width: 300px; height: 100px; margin-top: 50px; background: cyan'>
+					I am your first toy
+				</div>
+				<div class="toy" style='width: 300px; height: 100px; margin-top: 50px; background: lime'>
+					I am your second toy
+				</div>
+				<div class="toy" style='width: 300px; height: 100px; margin-top: 50px; background: orange'>
+					I am your third toy
 				</div>
 			</div>
 		</div>

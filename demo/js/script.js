@@ -4,7 +4,8 @@ $(document).ready(function(){
 	if(cssKeyframesRules!=null){
 		for(var rule in cssKeyframesRules){		
 			$('#animation-demo .animation-name select').append($('<option>'+ cssKeyframesRules[rule].name +'</option>'));
-			$('#multiple-animations-demo .animation-name select').append($('<option>'+ cssKeyframesRules[rule].name +'</option>'));			
+			$('#multiple-animations-demo .animation-name select').append($('<option>'+ cssKeyframesRules[rule].name +'</option>'));
+			$('#animation-timeline-demo .animation-name select').append($('<option>'+ cssKeyframesRules[rule].name +'</option>'));			
 		}
 	}
 	else{
@@ -109,6 +110,72 @@ $(document).ready(function(){
 	});
 	$('#multiple-animations-demo .resume-animation').click(function(){
 		toy2.resume();
+	});
+	
+	
+	// ANIMATION TIMELINE
+	var at = null;
+	$('#animation-timeline-demo .play-animation').click(function(){
+		if(!at){
+			at = new AnimationTimeline({
+				animations: [
+					new Animation({
+						element: $('#animation-timeline-demo .toy:nth-of-type(1)')[0],
+						animations:[
+							{
+								name: $('#animation-timeline-demo .animation-1 .animation-name select').val(),
+								duration: $('#animation-timeline-demo .animation-1 .animation-duration input').val() + 'ms',
+								delay: $('#animation-timeline-demo .animation-1 .animation-delay input').val(),
+								count: $('#animation-timeline-demo .animation-1 .animation-count input').val(),
+								direction: $('#animation-timeline-demo .animation-1 .animation-direction select').val(),
+								fillMode: $('#animation-timeline-demo .animation-1 .animation-fill-mode select').val(),
+								timingFunction: $('#animation-timeline-demo .animation-1 .animation-timing-function select').val()
+							}
+						]				
+					}),
+					new Animation({
+						element: $('#animation-timeline-demo .toy:nth-of-type(2)')[0],
+						animations:[					
+							{
+								name: $('#animation-timeline-demo .animation-2 .animation-name select').val(),
+								duration: $('#animation-timeline-demo .animation-2 .animation-duration input').val() + 'ms',
+								delay: $('#animation-timeline-demo .animation-2 .animation-delay input').val(),
+								count: $('#animation-timeline-demo .animation-2 .animation-count input').val(),
+								direction: $('#animation-timeline-demo .animation-2 .animation-direction select').val(),
+								fillMode: $('#animation-timeline-demo .animation-2 .animation-fill-mode select').val(),
+								timingFunction: $('#animation-timeline-demo .animation-2 .animation-timing-function select').val()
+							}
+						]				
+					}),
+					new Animation({
+						element: $('#animation-timeline-demo .toy:nth-of-type(3)')[0],
+						animations:[					
+							{
+								name: $('#animation-timeline-demo .animation-3 .animation-name select').val(),
+								duration: $('#animation-timeline-demo .animation-3 .animation-duration input').val() + 'ms',
+								delay: $('#animation-timeline-demo .animation-3 .animation-delay input').val(),
+								count: $('#animation-timeline-demo .animation-3 .animation-count input').val(),
+								direction: $('#animation-timeline-demo .animation-3 .animation-direction select').val(),
+								fillMode: $('#animation-timeline-demo .animation-3 .animation-fill-mode select').val(),
+								timingFunction: $('#animation-timeline-demo .animation-3 .animation-timing-function select').val()
+							}
+						]				
+					})
+				],
+				delay: 0
+			});
+		}		
+		
+		at.play();
+	});
+	$('#animation-timeline-demo .stop-animation').click(function(){
+		at.stop();
+	});
+	$('#animation-timeline-demo .pause-animation').click(function(){
+		at.pause();
+	});
+	$('#animation-timeline-demo .resume-animation').click(function(){
+		at.resume();
 	});
 });
 

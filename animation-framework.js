@@ -23,86 +23,46 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ////////////////////// ANIMATION TIMELINE ////////////////////////////////////////////////////////////////////////////////
 /*
+* 
 * The Animation Timeline consumes Animation objects objects.
 *
-*
-* +----------------------------+
-* | Animation object structure |
-* +----------------------------+
+* +--------------------------------------------+
+* | Animation object paramaters data structure |
+* +--------------------------------------------+
 *
 * These are native javascript objects.
 *
 * {
-* 	element: null,							==> a DOM element
-* 	keyframesName: '',						==> CSS keyframes name
-*   direction: '',							==> normal | alternate
-*   count: '1',								==> # | infinite
-*   fillMode: 'both'						==> none | both | forwards | backwards
-* 	startAt: null,							==> keyframe (e.g. '35frm', '0frm') | time in s or ms (e.g '500ms', '2s', etc) | # of milliseconds (e.g. 2300, 400, etc)
-*   endAt: null,							==> keyframe | time in s or ms | # of milliseconds
-*   onStart: function(event){}				==> Called when the animation starts
-*   onKeyFrame: function(event)				==> Called when the animation reaches a keyframe
-*   onEnd: function(event){}				==> Called when the animation ends
-* 	setters & getters
-* }
-*
-* NOTE THAT THE DELAY PROPERTY IS NOT SUPPORTED as it can be computed and passed via the startAt property
-*
-* These animation are embedded in a Track object which join together all animations occuring to an element
-*
-* {
 * 	element: DOM Element
 *   animations: [
-* 		animation,
-* 		animation,
+*	 	{
+* 			name: '',								==> CSS keyframes name
+*	   		duration: null,							==> time in s or ms | # of milliseconds 
+*	 		delay: '',								==> time in s or ms (e.g '500ms', '2s', etc) | # of milliseconds (e.g. 2300, 400, etc)
+*	   		count: '',								==> # | infinite
+*	   		direction: '',							==> normal | alternate
+* 			timingFunction: 'linear'				==> linear | ease-in | ease-out | ease-in-out
+*	   		fillMode: ''							==> none | both | forwards | backwards
+*	 		setters & getters
+* 		},
+* 		animation2,
 * 		...
 * 	]
 * }
 *
-* +------------------------+
-* | Track object structure |
-* +------------------------+
+* +----------------------------------------------------+
+* | AnimationTimeline object paramaters data structure |
+* +----------------------------------------------------+
 *
 * {
-* 	animate: '',							==> jQuery object | CSS selector | DOM object
-* 	animations: [
-* 		{animation1},
-* 		{animation2},
-* 		{...}
-* 	]
-* }
-*
-* It is based on a system of frames per second (FPS).
-*
-*
-* +---------+
-* | Options |
-* +---------+
-*
-* {
-* 	fps: 30,      							==> These do not correspond to CSS keyframes (keyframes are just meaningfull frames like in Flash)
-*   tracks: [{track1},{track2}, etc],
+*   animations: [
+* 		{Animation1},
+* 		{Animations2}, 
+* 		etc
+* 	],
 *   delay: 0,								==> The delay before the timeline starts
-*   snapToFrames: true,						==> When assigning keyframes to frames it may be needed to rewrite some CSS keyframes so that they match the frames of the timeline
 *   loop: false
 * }
-*
-*
-* +--------------+
-* | Events fired |
-* +--------------+
-*
-* timelineStart		==> Guess what?
-* timelineEnd		==> Guess what?
-* animationStart	==> Triggered when the animation starts. The event object will carry the animation object.
-* animationEnd		==> Triggered when the animation ends. The event object will carry the animation object.
-*
-* Notes
-* - A DOM|Jquery object can run several animations at once in parallel (but you will need to create several
-* 	Animation objects)
-* - when writing your css animations, use your prefered vendor prefix, the plugin will
-*   automatically prepend the missing '-webkit-', '-moz-', '-o-' and '-ms-' and add the corresponding rules to the css
-*   (even if the CSS properties are not yet supported by the vendors - e.g. animation with '-o-' or '-ms-').
 *
 *
 */
@@ -113,42 +73,26 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /* Constructor */
 function AnimationTimeline(options) {
-	this.fps = 30;
-	this.animations = [];
-	this.delay = 0;
-	this.loop = false;
-	//this.snapToFrames = true;
-
-	this.tracks = [];
-
-	/*
-	 * Scan Animations to check if some of them apply to the same Element.
-	 * If so the Animations are grouped.
-	 * Then Timeline Tracks are created (with one or more Animation)
-	 */
-	var tempAnimations = this.animations;
-	while(tempAnimations.length > 0) {
-
-		var trackAnimations = [tempAnimations.splice(0, 1)];
-
-		for(var i = 0; i < tempAnimations.length; i++) {
-			if(trackAnimations[0].element === tempAnimations[i].element) {
-				trackAnimations.push(tempAnimations.splice(i--, 1));
-			}
-		}
-
-		this.tracks.push(new AnimationTrack(trackAnimations));
-	}
+	this.animations = options.animations || [];
+	this.delay = this.delay || 0;
+	//this.loop = this.loop || false;
 }
 
 AnimationTimeline.prototype.play = function() {
+	var _this = this;
+	setTimeout(function(){
+		for(var animation in _this.animations) _this.animations[animation].play();	
+	},this.delay);	
 };
 AnimationTimeline.prototype.stop = function() {
+	for(var animation in this.animations) this.animations[animation].stop();
 };
-//Timeline.prototype.pause = function(){};
-//Track.prototype.resume = function(){};
-//Track.prototype.rewind = function(){};
-//Track.prototype.goto = function(){};
+AnimationTimeline.prototype.pause = function(){
+	for(var animation in this.animations) this.animations[animation].pause();
+};
+AnimationTimeline.prototype.resume = function(){
+	for(var animation in this.animations) this.animations[animation].resume();
+};
 
 /*
 * CLASS Animation
