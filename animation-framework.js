@@ -24,16 +24,14 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////// ANIMATION TIMELINE ////////////////////////////////////////////////////////////////////////////////
 /*
 * 
-* The Animation Timeline consumes Animation objects objects.
+* The Animation Timeline consumes Animation objects.
 *
 * +--------------------------------------------+
 * | Animation object paramaters data structure |
 * +--------------------------------------------+
 *
-* These are native javascript objects.
-*
 * {
-* 	element: DOM Element
+* 	element: DOM Element | CSS Selector | jQuery object
 *   animations: [
 *	 	{
 * 			name: '',								==> CSS keyframes name
@@ -43,7 +41,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *	   		direction: '',							==> normal | alternate
 * 			timingFunction: 'linear'				==> linear | ease-in | ease-out | ease-in-out
 *	   		fillMode: ''							==> none | both | forwards | backwards
-*	 		setters & getters
 * 		},
 * 		animation2,
 * 		...
@@ -69,18 +66,42 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /*
  * CLASS AnimationTimeline
- */
-
-/* Constructor */
-function AnimationTimeline(options, animations) {
-	this.data = options;
+ *
+ * Constructor
+ * 
+ * AnimationTimeline({
+ * 	delay: # of ms || time in s or ms (e.g. 500ms, 2s),		--default: 0
+ * 	loop: false || true, 									--default: false
+ *  animations: [{
+ * 		see "Animation object paramaters data structure"
+ * 	}]
+ * });
+ * 
+ * Or 
+ * 
+ * AnimationTimeline({
+ * 	delay,
+ * 	loop
+ * },[
+ * 	Animantion object,
+ * 	Animation object,
+ * 	...
+ * ]);
+ */ 
+ 
+function AnimationTimeline(arg1, arg2) {	
 	
-	this.animations =  [];
-	for(var animation in options.animations) this.animation.push(new Animation(options.animations[i]));
+	this.data = arg1;	
 	
-	this.delay = options.delay || 0;
+	if(!arg2){
+		this.animations = [];
+		for(var animation in arg1.animations) this.animations.push(new Animation(arg1.animations[animation]));
+	}
+	else this.animations = arg2;
 	
-	this.loop = options.loop || false;
+	this.delay = arg1.delay || 0;
+	
+	this.loop = arg1.loop || false;
 }
 
 AnimationTimeline.prototype.play = function() {
