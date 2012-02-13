@@ -72,10 +72,15 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /* Constructor */
-function AnimationTimeline(options) {
-	this.animations = options.animations || [];
-	this.delay = this.delay || 0;
-	//this.loop = this.loop || false;
+function AnimationTimeline(options, animations) {
+	this.data = options;
+	
+	this.animations =  [];
+	for(var animation in options.animations) this.animation.push(new Animation(options.animations[i]));
+	
+	this.delay = options.delay || 0;
+	
+	this.loop = options.loop || false;
 }
 
 AnimationTimeline.prototype.play = function() {
@@ -100,6 +105,8 @@ AnimationTimeline.prototype.resume = function(){
 
 /* Constructor */
 function Animation(options) {
+	
+	this.data = options;
 	
 	this.status = this.NEEDS_CSS_REFRESH;
 		
@@ -172,7 +179,8 @@ Animation.prototype.resume = function(){
 
 /* Setters & getters */
 Animation.prototype.setElement = function(newElement) {
-	if(!(this.element = newElement)) throw(new Error('Animation: an element is required'));
+	/* Expects a CSS selector, a DOM element or a jQuery object */
+	if(!(this.element = newElement.jquery ? newElement[0] : typeof(newElement) == 'string' ? $(newElement)[0] : newElement)) throw(new Error('Animation: an element is required'));
 };
 Animation.prototype.getElement = function() {
 	return this.element;
@@ -184,7 +192,8 @@ Animation.prototype.setAnimations = function(newAnimations) {
 Animation.prototype.getAnimations = function() {
 	return this.animations;
 };
-Animation.prototype.setName = function(animationIndex, newName) {
+Animation.prototype.setName = function(animationIndex, newName) {	
+	
 	if(!(this.animations[animationIndex].name = newName)) throw(new Error('Animation: an animation name is required'));
 	this.status = this.NEEDS_CSS_REFRESH;	
 };

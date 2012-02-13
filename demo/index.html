@@ -24,22 +24,43 @@
   	body{
   		font-size: 0.9em;
   		font-family: 'Verdana','Star Avenue','SF Port McKenzie';
+  		background: #777;
   	}
   	h1, h2, h3{
-  		font-family: 'SansBlack';
-  		font-weight: bold;
+  		font-family: 'Star Avenue', 'SansBlack';
   		padding: 0 0 10px 0;
   		margin: 0;
+  		color: #3a3a3a;
   	}
   	h1{
   		font-size: 5em;
+  		text-align: center;
   		line-height: 1em;
-  		padding: 10px 10px 30px 10px;
-  		color: #777;
-  		text-shadow: 0 1px rgba(255,255,255, 0.3), 0 -1px 1px rgba(0,0,0,0.7);
-  		background: #777;
+  		padding: 20px 10px 30px 10px;
+  		color: #333;
+  		text-shadow: 0 1px rgba(255,255,255, 0.1), 0 -1px 1px rgba(0,0,0,0.9);
+  		background: #3a3a3a;
+  		border-bottom: 2px solid #000;
   	}
-  	section{width: 33%; float: left; padding: 10px; box-sizing: border-box}
+  	a{}
+  	section{width: 33.33%; float: left; padding: 10px; box-sizing: border-box; border-top: 1px solid #fff;}
+  	label{font-size: 0.8em; display: block}
+  	input[type=number]{max-width: 100px;}  	
+  	.animation-duration, .animation-delay, .animation-count, .animation-direction, .animation-fill-mode, .animation-timing-function{
+  		float: left;
+  		width: 33%;
+  		margin-top: 10px;
+  	}
+  	.play-animation, .stop-animation, .pause-animation, .resume-animation{
+  		display: block;
+  		float: left;
+  		width: 25%;
+  		margin-top: 10px;
+  	}
+  	.animation-direction, .play-animation, .playground, section>div{clear: left;}
+  	.playground{
+  		padding-top: 1px
+  	 }
   </style>
 </head>
 <body>
@@ -51,7 +72,7 @@
 	<section id="animation-demo">
 		<header>
 			<h2>Animation Demo</h2>
-		</header>
+		</header>		
 		<div>
 			<form>
 				<fieldset class="animation-name">

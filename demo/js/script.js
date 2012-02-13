@@ -17,7 +17,7 @@ $(document).ready(function(){
 		
 		if(!toy1){
 			toy1 = new Animation({
-				element: $('#animation-demo .toy')[0],
+				element: $('#animation-demo .toy'),
 				animations:[
 					{
 						name: $('#animation-demo form .animation-name select').val(),

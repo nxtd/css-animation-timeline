@@ -11,6 +11,11 @@
 	0%{opacity: 0.0;}
 	100%{opacity: 1.0;}
 }
+@-webkit-keyframes fade2red{ 
+	0%{opacity: 0.2;}
+	75%{background: cyan}
+	100%{opacity: 1.0; background: red}
+}
 
 /*
  * Fade in while sliding down in position
